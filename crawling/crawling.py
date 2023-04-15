@@ -17,12 +17,13 @@ import numpy as np
 from openai.embeddings_utils import distances_from_embeddings, cosine_similarity
 from dotenv import load_dotenv
 
+### Crawling ###
 # Regex pattern to match a URL
 HTTP_URL_PATTERN = r'^http[s]{0,1}://.+$'
 
 # Define root domain to crawl
-domain = "openai.com"
-full_url = "https://openai.com/"
+full_url = "https://godpeny.github.io/"
+domain = urlparse(full_url).netloc
 
 load_dotenv()
 openai.api_key = os.getenv("OPENAI_API_KEY")
@@ -167,6 +168,8 @@ crawl(full_url)
 ### Step 5
 ################################################################################
 
+
+### Converting text to csv ###
 def remove_newlines(serie):
     serie = serie.str.replace('\n', ' ')
     serie = serie.str.replace('\\n', ' ')
@@ -181,6 +184,7 @@ def remove_newlines(serie):
 
 # Create a list to store the text files
 texts = []
+domain_len = len(domain)
 
 # Get all the text files in the text directory
 for file in os.listdir("text/" + domain + "/"):
@@ -188,8 +192,8 @@ for file in os.listdir("text/" + domain + "/"):
     with open("text/" + domain + "/" + file, "r", encoding="UTF-8") as f:
         text = f.read()
 
-        # Omit the first 11 lines and the last 4 lines, then replace -, _, and #update with spaces.
-        texts.append((file[11:-4].replace('-', ' ').replace('_', ' ').replace('#update', ''), text))
+        # Omit the first 'domain_len' lines and the last 4 lines('.txt'), then replace -, _, and #update with spaces.
+        texts.append((file[domain_len:-4].replace('-',' ').replace('_', ' ').replace('#update',''), text))
 
 # Create a dataframe from the list of texts
 df = pd.DataFrame(texts, columns=['fname', 'text'])
