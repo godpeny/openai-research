@@ -398,3 +398,7 @@ def answer_question(
 print(answer_question(df, question="What day is it?", debug=False))
 
 print(answer_question(df, question="What is our newest embeddings model?"))
+
+print(answer_question(df, question="What is the name of the author of the page you just scrapped?", debug=False))
+
+print(answer_question(df, question="What country is the author of the page living?", debug=False))
